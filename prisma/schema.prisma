@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+  password String
+  posts Post[]
+  comments Comment[]
+
+  @@map("user")
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String
+  content   String?
+  like      Int @default(0)
+  postImg   String?
+  published Boolean @default(false)
+  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  Int
+  categories PostCategory[]
+  tags PostTag[]
+  comments   Comment[]
+  @@map("post")
+}
+
+model Category{
+  id        Int     @id @default(autoincrement())
+  name  String
+  categoryImg String?
+  posts PostCategory[]
+  @@map("category")
+}
+
+model PostCategory {
+  categoryId Int      @map("category_id")
+  postId     Int      @map("post_id")
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([categoryId, postId])
+  @@map("post_category")
+}
+
+model Tag{
+  id        Int     @id @default(autoincrement())
+  name  String
+  posts PostTag[]
+  @@map("tag")
+}
+
+model PostTag {
+  tagId Int      @map("tag_id")
+  postId     Int      @map("post_id")
+  tag   Tag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([tagId, postId])
+  @@map("post_tag")
+}
+
+
+
+model Comment {
+  id        Int     @id @default(autoincrement())
+  text     String
+  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  Int
+  post    Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId  Int
+  @@map("comment")
+}
+
