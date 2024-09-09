@@ -6,7 +6,11 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:3000', // Adjust the origin as per your needs
+  }),
+);
 
 // url http://localhost:5001/api/v1/
 
