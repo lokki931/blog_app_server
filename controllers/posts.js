@@ -51,20 +51,28 @@ const updatePost = async (req, res) => {
     errors.content = { message: 'Add content post' };
   }
 
-  if (!req.file) {
-    errors.postImg = { message: 'Add image for post' };
-  }
+  // if (!req.file) {
+  //   errors.postImg = { message: 'Add image for post' };
+  // }
 
   if (Object.keys(errors).length > 0) {
     return res.status(400).json(errors);
   }
 
   try {
-    const userId = req.userId;
-
     const { id } = req.params;
 
     const { title, content } = req.body;
+
+    const post = await prisma.post.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    let img = post.postImg;
+
+    if (req.file) {
+      img = `http://localhost:${process.env.PORT}/static/${req.file.filename}`;
+    }
 
     const updatePost = await prisma.post.update({
       where: {
@@ -73,8 +81,7 @@ const updatePost = async (req, res) => {
       data: {
         title,
         content,
-        authorId: parseInt(userId),
-        postImg: `http://localhost:${process.env.PORT}/static/${req.file.filename}`,
+        postImg: img,
       },
     });
 
