@@ -96,6 +96,8 @@ const postsAll = async (req, res) => {
   try {
     const posts = await prisma.post.findMany({
       where: { published: true },
+      skip: +req.query.skip,
+      take: +req.query.take,
     });
 
     res.json(posts);
