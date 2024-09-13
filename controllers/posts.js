@@ -96,8 +96,11 @@ const postsAll = async (req, res) => {
   try {
     const posts = await prisma.post.findMany({
       where: { published: true },
-      skip: +req.query.skip,
-      take: +req.query.take,
+      // skip: +req.query.skip,
+      // take: +req.query.take,
+      orderBy: {
+        id: 'desc',
+      },
     });
 
     res.json(posts);
@@ -152,10 +155,10 @@ const getUserPosts = async (req, res) => {
   }
 };
 const incrementLike = async (req, res) => {
-  const postId = req.body.postId;
+  const { id } = req.params;
   try {
     const likeAdd = await prisma.post.update({
-      where: { id: parseInt(postId) },
+      where: { id: parseInt(id) },
       data: {
         like: {
           increment: 1,

@@ -30,6 +30,6 @@ router.get('/user', authenticateToken, getUserPosts);
 // delete post by id
 router.delete('/:id/delete', authenticateToken, deletePost);
 // increment like post
-router.put('/like', incrementLike);
+router.put('/:id/like', incrementLike);
 
 module.exports = router;
