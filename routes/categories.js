@@ -6,6 +6,7 @@ const {
   categoriesAll,
   updateCategory,
   deleteCategory,
+  getCategoryById,
 } = require('../controllers/categories');
 
 const { authenticateToken } = require('../utils/verifyToken');
@@ -16,5 +17,6 @@ router.post('/create', authenticateToken, upload.single('categoryImg'), addCateg
 router.put('/:id/update', authenticateToken, upload.single('categoryImg'), updateCategory);
 router.delete('/:id/delete', authenticateToken, deleteCategory);
 router.get('/', categoriesAll);
+router.get('/:id/category', getCategoryById);
 
 module.exports = router;

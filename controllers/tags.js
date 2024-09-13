@@ -92,9 +92,30 @@ const deleteTag = async (req, res) => {
   }
 };
 
+const getTagById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const tag = await prisma.tag.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!tag) {
+      return res.status(404).json({ error: 'tag not found' });
+    }
+
+    res.json(tag);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({ error: 'Error fetching tag' });
+  }
+};
+
 module.exports = {
   addTag,
   tagsAll,
   updateTag,
   deleteTag,
+  getTagById,
 };
