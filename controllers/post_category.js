@@ -4,6 +4,18 @@ const addPostCategory = async (req, res) => {
   try {
     const { postId, categoryId } = req.body;
 
+    // Check if the post-category relationship already exists
+    const existingPostCategory = await prisma.postCategory.findFirst({
+      where: {
+        postId,
+        categoryId,
+      },
+    });
+
+    if (existingPostCategory) {
+      return res.status(409).json({ error: 'Post-category relationship already exists' });
+    }
+
     const createdPostCategory = await prisma.postCategory.create({
       data: {
         postId,
@@ -11,7 +23,7 @@ const addPostCategory = async (req, res) => {
       },
     });
 
-    res.status(201).json({ postCategory: createdPostCategory });
+    res.status(201).json(createdPostCategory);
   } catch (error) {
     console.error(error);
 

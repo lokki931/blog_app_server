@@ -4,6 +4,17 @@ const addPostTag = async (req, res) => {
   try {
     const { postId, tagId } = req.body;
 
+    const existingPostTag = await prisma.postTag.findFirst({
+      where: {
+        postId,
+        tagId,
+      },
+    });
+
+    if (existingPostTag) {
+      return res.status(409).json({ error: 'Post-tag relationship already exists' });
+    }
+
     const createdPostTag = await prisma.postTag.create({
       data: {
         postId,
@@ -11,7 +22,7 @@ const addPostTag = async (req, res) => {
       },
     });
 
-    res.status(201).json({ postTag: createdPostTag });
+    res.status(201).json(createdPostTag);
   } catch (error) {
     console.error(error);
 
