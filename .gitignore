@@ -3,4 +3,4 @@
 /prisma/migrations
 # Keep environment variables out of version control
 .env
-prisma/dev.db
+/prisma/dev.db
