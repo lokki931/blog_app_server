@@ -6,7 +6,7 @@ const { addPostTag, findPostOnTag, findTagOnPost } = require('../controllers/pos
 const { authenticateToken } = require('../utils/verifyToken');
 
 router.post('/', authenticateToken, addPostTag);
-router.get('/:id/tags', findPostOnTag);
-router.get('/:id/posts', findTagOnPost);
+router.get('/:id/tags', findTagOnPost);
+router.get('/:id/posts', findPostOnTag);
 
 module.exports = router;
