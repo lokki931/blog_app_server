@@ -16,7 +16,7 @@ const addComment = async (req, res) => {
 
     const { text, postId } = req.body;
 
-    const createdCommnet = await prisma.post.create({
+    const createdCommnet = await prisma.comment.create({
       data: {
         text,
         postId,
