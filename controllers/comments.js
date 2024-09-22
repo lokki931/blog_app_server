@@ -36,6 +36,13 @@ const postCommentsAll = async (req, res) => {
     const { id } = req.params;
     const comments = await prisma.comment.findMany({
       where: { postId: parseInt(id) },
+      include: {
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
     res.json(comments);
